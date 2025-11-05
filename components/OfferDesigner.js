@@ -10,7 +10,6 @@ export default function OfferDesigner({ selectedMedia }) {
     textColor: '#ffffff',
     fontSize: 'medium'
   })
-  const [previewMode, setPreviewMode] = useState(false)
   const canvasRef = useRef(null)
 
   const handleInputChange = (field, value) => {
@@ -18,6 +17,7 @@ export default function OfferDesigner({ selectedMedia }) {
   }
 
   const exportOffer = () => {
+    // In production, this would call the API to export the offer
     alert('سيتم تصدير العرض قريباً!')
   }
 
@@ -134,12 +134,6 @@ export default function OfferDesigner({ selectedMedia }) {
 
         {/* Action Buttons */}
         <div className="flex gap-4">
-          <button
-            onClick={() => setPreviewMode(!previewMode)}
-            className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
-          >
-            👁️ {previewMode ? 'إخفاء المعاينة' : 'معاينة'}
-          </button>
           <button
             onClick={exportOffer}
             className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"

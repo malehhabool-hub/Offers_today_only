@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -9,10 +10,32 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Rate limiting configuration
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+// File operation rate limiter (more restrictive)
+const fileOperationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 file operations per windowMs
+  message: 'Too many file operations from this IP, please try again later.'
+});
+
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',') 
+  : ['http://localhost:3000'];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(limiter); // Apply general rate limiting to all routes
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, '..', 'uploads');
@@ -63,8 +86,8 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Upload media files
-app.post('/api/upload', upload.array('files', 10), (req, res) => {
+// Upload media files (with file operation rate limiting)
+app.post('/api/upload', fileOperationLimiter, upload.array('files', 10), (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No files uploaded' });
@@ -115,8 +138,8 @@ app.get('/api/media', (req, res) => {
   }
 });
 
-// Delete a file
-app.delete('/api/media/:id', (req, res) => {
+// Delete a file (with file operation rate limiting)
+app.delete('/api/media/:id', fileOperationLimiter, (req, res) => {
   try {
     const { id } = req.params;
     const files = fs.readdirSync(uploadsDir);

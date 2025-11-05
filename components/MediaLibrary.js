@@ -9,7 +9,9 @@ export default function MediaLibrary({ onSelectMedia }) {
     const files = Array.from(event.target.files)
     setIsUploading(true)
 
-    // Simulate file upload - in production this would upload to server
+    // TODO: In production, integrate with backend API endpoint
+    // This currently simulates file upload for demo purposes
+    // Replace with actual API call: await fetch('/api/upload', { method: 'POST', body: formData })
     setTimeout(() => {
       const newFiles = files.map((file, index) => ({
         id: Date.now() + index,
