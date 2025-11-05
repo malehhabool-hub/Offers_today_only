@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function MediaLibrary({ onSelectMedia }) {
   const [uploadedFiles, setUploadedFiles] = useState([])
@@ -77,10 +78,12 @@ export default function MediaLibrary({ onSelectMedia }) {
             >
               <div className="aspect-video bg-gray-100 relative">
                 {file.type.startsWith('image/') ? (
-                  <img
+                  <Image
                     src={file.url}
                     alt={file.name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    unoptimized
                   />
                 ) : (
                   <video
