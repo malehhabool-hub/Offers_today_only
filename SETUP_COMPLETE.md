@@ -160,11 +160,11 @@ chmod 755 uploads/
 For issues or questions:
 - Check the [README.md](README.md) for detailed documentation
 - Check the [USAGE_GUIDE.md](USAGE_GUIDE.md) for usage instructions
+- Check the [ARCHITECTURE.md](ARCHITECTURE.md) for technical architecture details
 - Open an issue on the GitHub repository
 
 ---
 
-**Setup completed on:** 2025-11-06  
 **Platform Status:** ✅ Ready to use  
 **Frontend:** http://localhost:3000  
 **Backend:** http://localhost:3001
