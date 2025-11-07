@@ -54,14 +54,14 @@ The platform is running with both services started in async mode:
 
 ### Backend (Terminal 1)
 ```bash
-cd /home/runner/work/Offers_today_only/Offers_today_only
+cd <project-directory>
 npm run server
 ```
 This starts the Express server on port 3001.
 
 ### Frontend (Terminal 2)
 ```bash
-cd /home/runner/work/Offers_today_only/Offers_today_only
+cd <project-directory>
 npm run dev
 ```
 This starts the Next.js development server on port 3000.
@@ -135,7 +135,7 @@ The platform interface is fully in Arabic (RTL) with a modern, purple-themed des
 1. **Both services must be running** for full functionality
 2. **Frontend port:** 3000 (user interface)
 3. **Backend port:** 3001 (API server)
-4. **Uploads directory:** `/home/runner/work/Offers_today_only/Offers_today_only/uploads/`
+4. **Uploads directory:** `./uploads/` (relative to project root)
 5. **Environment:** Development mode
 6. **CORS:** Enabled for localhost:3000
 
@@ -173,5 +173,4 @@ You can now:
 ---
 
 **Platform Status:** 🟢 RUNNING  
-**Created:** 2025-11-07  
-**Developer:** malehhabool-hub
+**Last Updated:** 2025-11-07
