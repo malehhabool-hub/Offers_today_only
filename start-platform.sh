@@ -2,6 +2,8 @@
 
 # 🎁 Offers Today Only - Platform Startup Script
 # This script starts both frontend and backend services
+# Usage: ./start-platform.sh [FRONTEND_PORT] [BACKEND_PORT]
+# Example: ./start-platform.sh 4000 4001
 
 echo "🚀 Starting Offers Today Only Platform..."
 echo ""
@@ -16,6 +18,20 @@ NC='\033[0m' # No Color
 # PID file locations
 BACKEND_PID_FILE=".backend.pid"
 FRONTEND_PID_FILE=".frontend.pid"
+
+# Load environment variables from .env if it exists
+if [ -f ".env" ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+fi
+
+# Allow port override via command line arguments
+FRONTEND_PORT="${1:-${FRONTEND_PORT:-3000}}"
+BACKEND_PORT="${2:-${PORT:-3001}}"
+
+echo -e "${BLUE}📝 Configuration:${NC}"
+echo -e "   Frontend Port: ${GREEN}${FRONTEND_PORT}${NC}"
+echo -e "   Backend Port:  ${GREEN}${BACKEND_PORT}${NC}"
+echo ""
 
 # Check if node_modules exists
 if [ ! -d "node_modules" ]; then
@@ -45,20 +61,20 @@ echo -e "${GREEN}✓ Environment setup complete!${NC}"
 echo ""
 
 # Check if services are already running
-if lsof -Pi :3001 -sTCP:LISTEN -t >/dev/null 2>&1; then
-    echo -e "${YELLOW}⚠️  Port 3001 is already in use. Backend may already be running.${NC}"
+if lsof -Pi :${BACKEND_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo -e "${YELLOW}⚠️  Port ${BACKEND_PORT} is already in use. Backend may already be running.${NC}"
 else
-    echo -e "${BLUE}🔌 Starting Backend API on port 3001...${NC}"
-    npm run server > /dev/null 2>&1 &
+    echo -e "${BLUE}🔌 Starting Backend API on port ${BACKEND_PORT}...${NC}"
+    PORT=${BACKEND_PORT} npm run server > /dev/null 2>&1 &
     echo $! > "$BACKEND_PID_FILE"
     sleep 3
 fi
 
-if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
-    echo -e "${YELLOW}⚠️  Port 3000 is already in use. Frontend may already be running.${NC}"
+if lsof -Pi :${FRONTEND_PORT} -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo -e "${YELLOW}⚠️  Port ${FRONTEND_PORT} is already in use. Frontend may already be running.${NC}"
 else
-    echo -e "${BLUE}🌐 Starting Frontend on port 3000...${NC}"
-    npm run dev > /dev/null 2>&1 &
+    echo -e "${BLUE}🌐 Starting Frontend on port ${FRONTEND_PORT}...${NC}"
+    FRONTEND_PORT=${FRONTEND_PORT} npm run dev > /dev/null 2>&1 &
     echo $! > "$FRONTEND_PID_FILE"
     sleep 5
 fi
@@ -68,8 +84,8 @@ echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━
 echo -e "${GREEN}✅ Platform is starting up!${NC}"
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
-echo -e "${BLUE}📱 Frontend:${NC}  http://localhost:3000"
-echo -e "${BLUE}🔌 Backend API:${NC} http://localhost:3001"
+echo -e "${BLUE}📱 Frontend:${NC}  http://localhost:${FRONTEND_PORT}"
+echo -e "${BLUE}🔌 Backend API:${NC} http://localhost:${BACKEND_PORT}"
 echo ""
 echo -e "${YELLOW}💡 Tip: Wait a few seconds for Next.js to compile before opening the browser${NC}"
 echo ""
