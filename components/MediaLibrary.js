@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 
-export default function MediaLibrary({ onSelectMedia }) {
+export default function MediaLibrary({ onSelectMedia, onUploadedFilesChange }) {
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [isUploading, setIsUploading] = useState(false)
 
@@ -22,7 +22,11 @@ export default function MediaLibrary({ onSelectMedia }) {
         uploadedAt: new Date().toISOString()
       }))
 
-      setUploadedFiles(prev => [...prev, ...newFiles])
+      const updatedFiles = [...uploadedFiles, ...newFiles]
+      setUploadedFiles(updatedFiles)
+      if (onUploadedFilesChange) {
+        onUploadedFilesChange(updatedFiles)
+      }
       setIsUploading(false)
     }, 1000)
   }
