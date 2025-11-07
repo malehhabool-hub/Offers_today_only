@@ -4,9 +4,9 @@
   "description": "منصة إبداعية لتصميم العروض - Creative platform for designing promotional offers",
   "main": "server/index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p ${FRONTEND_PORT:-3000}",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p ${FRONTEND_PORT:-3000}",
     "server": "node server/index.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
     "lint": "next lint"
