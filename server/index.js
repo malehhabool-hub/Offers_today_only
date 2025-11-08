@@ -182,12 +182,23 @@ app.post('/api/offers/export', (req, res) => {
   }
 });
 
-// AI Features (placeholder endpoints)
+// AI Features (placeholder endpoints for future integration)
 app.post('/api/ai/enhance-image', (req, res) => {
   res.json({
     success: true,
     message: 'AI image enhancement will be implemented with Replicate/Stability AI',
-    placeholder: true
+    placeholder: true,
+    suggestion: 'Integrate with services like Replicate, Stability AI, or CloudinaryAI'
+  });
+});
+
+app.post('/api/ai/remove-background', (req, res) => {
+  res.json({
+    success: true,
+    message: 'AI background removal ready for integration',
+    placeholder: true,
+    suggestion: 'Integrate with remove.bg API or similar service',
+    demoMode: true
   });
 });
 
@@ -195,7 +206,8 @@ app.post('/api/ai/generate-text', (req, res) => {
   res.json({
     success: true,
     message: 'AI text generation will be implemented with OpenAI GPT',
-    placeholder: true
+    placeholder: true,
+    suggestion: 'Integrate with OpenAI GPT-4 or similar service'
   });
 });
 
@@ -203,8 +215,53 @@ app.post('/api/ai/text-to-speech', (req, res) => {
   res.json({
     success: true,
     message: 'Text-to-speech will be implemented with ElevenLabs/Azure',
-    placeholder: true
+    placeholder: true,
+    suggestion: 'Integrate with ElevenLabs, Azure TTS, or Google Cloud TTS'
   });
+});
+
+// Design export endpoint
+app.post('/api/design/export', (req, res) => {
+  try {
+    const { design, format = 'png', quality = 'high' } = req.body;
+    
+    // This is a placeholder - in production, you would:
+    // 1. Generate image using canvas or puppeteer
+    // 2. Apply the design specifications
+    // 3. Save and return the file URL
+    
+    res.json({
+      success: true,
+      message: 'Design export initiated',
+      data: {
+        ...design,
+        exportedAt: new Date().toISOString(),
+        format,
+        quality,
+        status: 'processing'
+      }
+    });
+  } catch (error) {
+    console.error('Export error:', error);
+    res.status(500).json({ error: 'Failed to export design' });
+  }
+});
+
+// Templates endpoint
+app.get('/api/templates', (req, res) => {
+  try {
+    const { category } = req.query;
+    
+    // Return templates based on category
+    res.json({
+      success: true,
+      templates: [],
+      message: 'Templates endpoint ready for expansion'
+    });
+  } catch (error) {
+    console.error('Templates error:', error);
+    res.status(500).json({ error: 'Failed to fetch templates' });
+  }
 });
 
 // Error handling middleware
